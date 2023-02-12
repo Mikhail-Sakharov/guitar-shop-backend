@@ -1,0 +1,108 @@
+***************************************************************
+
+Установка NX
+npm install -g nx
+
+***************************************************************
+
+Генерация рабочего пространства
+Пример:
+npx create-nx-workspace@latest <Название проекта> --preset=nest --packageManager=npm --nxCloud=false --skipGit=false --appName=users
+
+    --packageManager. Менеджер пакетов, который используется для установки пакетов из npm. Возможные варианты: npm, pnpm и yarn.
+
+    --preset. Начальные настройки и заготовки. С помощью опции вы можете настроить начальный контент вашего рабочего пространства. Из коробки поддерживаются различные пресеты. Мы используем Nest, поэтому в качестве пресета укажем nest.
+
+    --nxCloud. Использовать распределённое облачное кэширование, чтобы ускорить CI. Мы не будем применять эту возможность, поэтому укажем сразу false.
+
+    --skipGit. Инициализировать репозиторий git. В нашем случае репозиторий создан, поэтому можно сразу передать в качестве значения false.
+
+    --appName. Название для первого приложения, которое будет сформировано на основании выбранного пресета. Мы начнём разрабатывать проект с микросервиса для управления пользователями. Назовём этот сервис users.
+
+***************************************************************
+
+Генерация приложения
+nx generate @nrwl/nest:app my-nest-app
+
+***************************************************************
+
+Генерация бибилиотек
+nx generate @nrwl/node:library shared-types
+nx generate @nrwl/node:library core
+
+***************************************************************
+
+Генерация контроллера
+nx generate @nrwl/nest:controller app/auth --project=users
+nx generate @nrwl/nest:controller app/user --project=users
+
+nx generate @nrwl/nest:controller app/post --project=blog
+nx generate @nrwl/nest:controller app/comment --project=blog
+
+***************************************************************
+
+Генерация сервиса
+nx generate @nrwl/nest:service app/auth --project=users
+nx generate @nrwl/nest:service app/user --project=users
+
+nx generate @nrwl/nest:service app/post --project=blog
+nx generate @nrwl/nest:service app/comment --project=blog
+
+***************************************************************
+
+Генерация модулей в приложении users
+nx generate @nrwl/nest:module app/auth --project=users
+nx generate @nrwl/nest:module app/user --project=users
+
+Генерация модулей в приложении blog
+nx generate @nrwl/nest:module app/post --project=blog
+nx generate @nrwl/nest:module app/comment --project=blog
+
+Генерация модулей в приложении notifier
+nx generate @nrwl/nest:module app/mail --project=notifier
+nx generate @nrwl/nest:module app/email-subscriber --project=notifier
+
+***************************************************************
+
+Запуск микросервиса:
+nx run user:serve
+nx run blog:serve
+
+***************************************************************
+
+Команды для настройки связи с БД PostgreSQL
+(выполнять из директории сервиса blog):
+
+Создание миграции (SQL код для создания таблиц):
+nx run blog:db-migrate
+
+Генерация PrismaClient (Через него работаем с Prisma):
+nx run blog:db-generate
+
+Наполнение тестовыми данными:
+nx run blog:db-fill
+
+***************************************************************
+
+Отправка писем
+
+curl --ssl \
+  --url 'smtp://localhost:5025' \
+  --mail-from 'sakharov_mikhail@hotmail.com' \
+  --mail-rcpt 'engineeroks@mail.ru' \
+  --upload-file email.txt
+
+Отправлять из папки с файлом email.txt
+
+***************************************************************
+***************************************************************
+***************************************************************
+
+После клонирования свежего репо:
+1. Добавить .env файлы
+2. Выполнить команду nx run blog:db-generate
+3. Выполнить команду npm install
+
+***************************************************************
+***************************************************************
+***************************************************************
