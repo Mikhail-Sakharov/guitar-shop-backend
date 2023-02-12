@@ -1,10 +1,7 @@
 export interface Review {
   id?: number;
   createdAt?: string;
-  user: {
-    firstName: string;
-    lastName: string;
-  };
+  userName: string;
   productId: number;
   advantages: string;
   disadvantages: string;
