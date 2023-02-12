@@ -1,6 +1,8 @@
 import {UserRole} from '@guitar-shop/shared-types';
-import {Injectable, UnauthorizedException} from '@nestjs/common';
+import {Inject, Injectable, UnauthorizedException} from '@nestjs/common';
+import {ConfigService, ConfigType} from '@nestjs/config';
 import {JwtService} from '@nestjs/jwt';
+import databaseConfig from '../../config/database.config';
 import {UserEntity} from '../user/user.entity';
 import {UserRepository} from '../user/user.repository';
 import {CreateUserDto} from './dto/create-user.dto';
@@ -16,8 +18,14 @@ interface TransformedUser {
 export class AuthService {
   constructor(
     private readonly userRepository: UserRepository,
+    private readonly configService: ConfigService,
+    @Inject(databaseConfig.KEY)
+    private readonly mongoConfig: ConfigType<typeof databaseConfig>,
     private readonly jwtService: JwtService
-  ) {}
+  ) {
+    console.log(configService.get<string>('database.host'));
+    console.log(mongoConfig.password);
+  }
 
   async register(dto: CreateUserDto) {
     const existingUser = await this.userRepository.findByEmail(dto.email);

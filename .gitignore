@@ -11,4 +11,5 @@
 coverage
 *.log
 *.env
+*.yml
 db

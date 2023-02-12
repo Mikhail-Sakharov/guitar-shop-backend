@@ -26,7 +26,10 @@ export class UserModel extends Document implements User {
   public passwordHash: string;
 
   @Prop({
-    required: true
+    required: true,
+    type: String,
+    enum: UserRole,
+    default: UserRole.User
   })
   public userRole: UserRole;
 }
