@@ -45,8 +45,11 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @Get('checkAuth')
   @HttpCode(HttpStatus.OK)
-  async checkAuth(@Req() req: RawBodyRequest<LoggedUser>) {
+  async checkAuth(
+    @Req() req: RawBodyRequest<LoggedUser>
+  ) {
     const user = await this.authService.checkAuth(req.user);
+    console.log(req.user);
     return fillObject(UserRdo, user);
   }
 }

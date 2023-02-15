@@ -57,7 +57,7 @@ export class AuthService {
 
   async loginUser(user: TransformedUser) {
     const payload = {
-      id: user.id,
+      _id: user.id,
       email: user.email,
       userName: user.userName,
       userRole: user.userRole
@@ -72,12 +72,12 @@ export class AuthService {
     if (!userData) {
       throw new UnauthorizedException('Not authorized');
     }
-  
+
     const user = await this.userRepository.findByEmail(userData.email);
     if (!user) {
       throw new UnauthorizedException('No users with such email found!');
     }
-  
+
     return user;
   }
 }
