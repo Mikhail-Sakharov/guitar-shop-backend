@@ -67,4 +67,17 @@ export class AuthService {
       accessToken: await this.jwtService.signAsync(payload)
     };
   }
+
+  async checkAuth(userData: TransformedUser) {
+    if (!userData) {
+      throw new UnauthorizedException('Not authorized');
+    }
+  
+    const user = await this.userRepository.findByEmail(userData.email);
+    if (!user) {
+      throw new UnauthorizedException('No users with such email found!');
+    }
+  
+    return user;
+  }
 }
