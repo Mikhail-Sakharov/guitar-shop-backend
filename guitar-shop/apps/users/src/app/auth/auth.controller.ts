@@ -34,6 +34,6 @@ export class AuthController {
     const user = await this.authService.verifyUser(dto);
     const transformedUser = fillObject(TransformedUserRdo, user);
     const accessToken = await this.authService.loginUser(transformedUser);
-    return fillObject(LoggedUserRdo, {...user, ...accessToken});
+    return fillObject(LoggedUserRdo, {...transformedUser, ...accessToken});
   }
 }

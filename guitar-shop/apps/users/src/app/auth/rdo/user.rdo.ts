@@ -1,3 +1,4 @@
+import {UserRole} from '@guitar-shop/shared-types';
 import {ApiProperty} from '@nestjs/swagger';
 import {Expose, Transform} from 'class-transformer';
 
@@ -30,4 +31,11 @@ export class UserRdo {
   })
   @Expose()
   public userName: string;
+
+  @ApiProperty({
+    description: 'UserRole',
+    example: 'Either Admin or User is available'
+  })
+  @Expose()
+  public userRole: UserRole;
 }

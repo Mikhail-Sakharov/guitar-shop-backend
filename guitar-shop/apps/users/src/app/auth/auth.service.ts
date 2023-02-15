@@ -1,31 +1,24 @@
 import {UserRole} from '@guitar-shop/shared-types';
-import {Inject, Injectable, UnauthorizedException} from '@nestjs/common';
-import {ConfigService, ConfigType} from '@nestjs/config';
+import {Injectable, UnauthorizedException} from '@nestjs/common';
 import {JwtService} from '@nestjs/jwt';
-import databaseConfig from '../../config/database.config';
 import {UserEntity} from '../user/user.entity';
 import {UserRepository} from '../user/user.repository';
 import {CreateUserDto} from './dto/create-user.dto';
 import {LoginUserDto} from './dto/login-user.dto';
 
 interface TransformedUser {
-  _id: string;
+  id: string;
   email: string;
   userName: string;
+  userRole: UserRole;
 }
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly userRepository: UserRepository,
-    private readonly configService: ConfigService,
-    @Inject(databaseConfig.KEY)
-    private readonly mongoConfig: ConfigType<typeof databaseConfig>,
     private readonly jwtService: JwtService
-  ) {
-    console.log(configService.get<string>('database.host'));
-    console.log(mongoConfig.password);
-  }
+  ) {}
 
   async register(dto: CreateUserDto) {
     const existingUser = await this.userRepository.findByEmail(dto.email);
@@ -59,15 +52,15 @@ export class AuthService {
     if (!checkUserResult) {
       throw new UnauthorizedException('The provided password is incorrect!');
     }
-
     return {...userEntity.toObject()};
   }
 
   async loginUser(user: TransformedUser) {
     const payload = {
-      _id: user._id,
+      id: user.id,
       email: user.email,
-      name: user.userName
+      userName: user.userName,
+      userRole: user.userRole
     };
 
     return {

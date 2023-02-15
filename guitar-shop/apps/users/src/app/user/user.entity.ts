@@ -4,6 +4,8 @@ import {genSalt, hash, compare} from 'bcrypt';
 const SALT_ROUNDS = 10;
 
 export class UserEntity implements User {
+  public _id: string;
+  public createdAt: string;
   public email: string;
   public userName: string;
   public passwordHash: string;
@@ -28,6 +30,8 @@ export class UserEntity implements User {
   }
 
   public fillEntity(user: User) {
+    this._id = user._id;
+    this.createdAt = user.createdAt;
     this.email = user.email;
     this.userName = user.userName;
     this.passwordHash = user.passwordHash;

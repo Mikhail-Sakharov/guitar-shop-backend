@@ -4,7 +4,7 @@ import {AuthModule} from './auth/auth.module';
 import {ConfigModule} from '@nestjs/config';
 import {ENV_FILE_PATH} from './app.constant';
 import {jwtOptions} from '../config/jwt.config';
-// import envSchema from './env.schema';
+import envSchema from './env.schema';
 import databaseConfig from '../config/database.config';
 import {MongooseModule} from '@nestjs/mongoose';
 import {getMongoDbConfig} from '../config/mongodb.config';
@@ -15,7 +15,8 @@ import {getMongoDbConfig} from '../config/mongodb.config';
       cache: true,
       isGlobal: true,
       envFilePath: ENV_FILE_PATH,
-      load: [databaseConfig, jwtOptions]
+      load: [databaseConfig, jwtOptions],
+      validationSchema: envSchema
     }),
     MongooseModule.forRootAsync(
       getMongoDbConfig()
