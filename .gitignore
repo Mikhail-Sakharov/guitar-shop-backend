@@ -13,3 +13,5 @@ coverage
 *.env
 *.yml
 db
+pgadmin
+2. Init Database
